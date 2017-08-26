@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2009, 2012 The University of Memphis. All rights
+	reserved. This program and the accompanying materials are made
+	available under the terms of the LIDA Software Framework
+	Non-Commercial License v1.0 which accompanies this distribution, and
+	is available at
+	http://ccrg.cs.memphis.edu/assets/papers/2010/LIDA-framework-non-commercial-v1.0.pdf
+--> 
+<lida xmlns="http://ccrg.cs.memphis.edu/LidaXMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ccrg.cs.memphis.edu/LidaXMLSchema LidaXMLSchema.xsd ">
+	<globalparams>
+		 <param name="agent.isLesioned" type="boolean">false</param> 
+	</globalparams> 
+	<taskmanager>
+		<param name="taskManager.tickDuration">1</param>
+		<param name="taskManager.maxNumberOfThreads">100</param> 
+		<param name="taskManager.shutdownTick">30005</param>	
+	</taskmanager>
+	<taskspawners>
+		<taskspawner name="defaultTS">
+			<class>edu.memphis.ccrg.lida.framework.tasks.TaskSpawnerImpl</class>
+		</taskspawner>
+	</taskspawners>
+	<submodules>
+		<module name="Environment">
+			<class>edu.memphis.ccrg.motivation.environment.ConditioningEnvironment</class>			 
+			<!-- Original Experiment
+				 Phase 1: 40 repetitions
+				 Phase 2: 2 repetitions
+				 Phase 3: 5 repetitions -->		
+			<param name="environment.experimentalStageSequences" type="string">
+				4,light-cue,food-delivery,null,null; 
+				2,food-delivery,licl-shot,null,null;
+				2,light-cue,null,null 
+			</param>
+			<!-- (4,2,2) Unpaired with LiCl Group add: null,null,null, -->
+			<param name="environment.stageLength" type="int">1000</param>
+			<param name="environment.foodDeliveryAmount" type="double">0.50</param>			
+			<param name="environment.consumptionAmount" type="double">0.25</param>
+			<param name="environment.eatingSensationAmount" type="double">0.5</param>
+			<param name="environment.eatingSensationChange" type="double">0.0011</param>
+			<param name="environment.eatingPleasureAmount" type="double">0.3</param>
+			<param name="environment.eatingPleasureChange" type="double">0.005</param>
+			<param name="environment.shotSicknessAmount" type="double">1.0</param>	
+			<param name="environment.sicknessChange" type="double">0.001</param>
+			<param name="environment.hungerChange" type="double">0.00</param>
+			<taskspawner>defaultTS</taskspawner>
+		</module>
+		<module name="SensoryMemory">
+			<class>edu.memphis.ccrg.motivation.sensorymemory.MotivationSensoryMemory</class>
+			<associatedmodule>Environment</associatedmodule>				
+			<param name="sm.senseFrequency" type="int">1</param>
+			<taskspawner>defaultTS</taskspawner>
+		</module>		
+		<module name="PerceptualAssociativeMemory">
+			<class>edu.memphis.ccrg.lida.motivation.pam.MotivationPerceptualAssociativeMemory</class>
+			<param name="pam.learningRate" type="double">0.1</param>		<!-- Testing -->
+			<param name="pam.discountRate" type="double">0.5</param>		<!-- Testing -->
+			<param name="pam.upscale" type="double">0.10</param>			<!-- Testing -->
+			<param name="pam.downscale" type="double">0.0</param>
+			<param name="pam.perceptThreshold" type="double">-1.0</param>
+			<param name="pam.propagateActivationThreshold" type="double">0.0</param>
+			<param name="pam.excitationTicksPerRun" type="int">1</param>
+			<param name="pam.propagationTicksPerRun" type="int">1</param>
+			<param name="pam.perceptMapping.1">node,PamNodeImpl,NodeImpl</param>
+			<param name="pam.perceptMapping.2">node,FeelingPamNodeImpl,FeelingNodeImpl</param>
+			<param name="pam.perceptMapping.3">link,PamLinkImpl,LinkImpl</param>
+			<param name="pam.perceptMapping.4">link,FeelingPamLinkImpl,FeelingLinkImpl</param>
+			<param name="pam.incentiveSalienceLinkType">FeelingPamLinkImpl</param>
+			<param name="pam.temporalLinkCategoryName">temporal-link</param>		
+			<param name="nodes">light-cue:0.0:PamNodeImpl,
+								food:0.0:PamNodeImpl,
+								eat-action:0.0:PamNodeImpl,
+								licl-shot:0.0:PamNodeImpl,
+								food-pleasure:0.0:FeelingPamNodeImpl:positive,
+								sickness:0.0:FeelingPamNodeImpl:negative,
+								hunger-need:0.0:FeelingPamNodeImpl:negative:drive, 
+								</param>
+			<param name="linkCategories">temporal-link</param>								
+			<param name="links"><!--hunger-need:eat-action:1.0:FeelingPamLinkImpl-->
+								</param>
+			<taskspawner>defaultTS</taskspawner>
+			<initialTasks>
+				<defaultticksperrun>5</defaultticksperrun>
+				<task name="LightCueDetector">
+				 	<tasktype>ObjectPresenceDetector</tasktype>
+                    <param name="modality">regular</param>
+                    <param name="contentName" type="string">light-cue</param>
+                    <param name="node">light-cue</param>
+				</task>
+				<task name="FoodDetector">
+				 	<tasktype>ObjectPresenceDetector</tasktype>
+                    <param name="modality">other</param>
+                    <param name="contentName" type="string">food</param>
+                    <param name="node">food</param>
+				</task>
+				<task name="EatingDetector">
+				 	<tasktype>FeelingDetector</tasktype>
+                    <param name="modality">feeling</param>
+                    <param name="contentName" type="string">eating</param>
+                    <param name="node">eat-action</param>
+				</task>
+				<task name="FoodPleasureDetector">
+				 	<tasktype>FeelingDetector</tasktype>
+                    <param name="modality">feeling</param>
+                    <param name="contentName" type="string">food-pleasure</param>
+                    <param name="node">food-pleasure</param>
+				</task>
+				<task name="ShotDetector">
+				 	<tasktype>ObjectPresenceDetector</tasktype>
+                	<ticksperrun>1</ticksperrun> 
+                    <param name="modality">regular</param>
+                    <param name="contentName" type="string">licl-shot</param>
+                    <param name="node">licl-shot</param>
+				</task>
+				<task name="SicknessDetector">
+				 	<tasktype>FeelingDetector</tasktype>
+				 	<ticksperrun>1</ticksperrun> 
+                    <param name="modality">feeling</param>
+                    <param name="contentName" type="string">sickness</param>
+                    <param name="node">sickness</param>
+				</task>
+				<task name="HungerDetector">
+				 	<tasktype>FeelingDetector</tasktype>
+                    <param name="modality">feeling</param>
+                    <param name="contentName" type="string">hunger-need</param>
+                    <param name="node">hunger-need</param>
+				</task>
+			</initialTasks>
+			<initializerclass>edu.memphis.ccrg.lida.motivation.pam.MotivationPamInitializer</initializerclass>
+		</module>		
+		 <module name="Workspace">
+            <class>edu.memphis.ccrg.lida.motivation.workspace.MotivationWorkspace</class>
+            <submodules>
+                <module name="CurrentSituationalModel">
+                    <class>edu.memphis.ccrg.lida.workspace.workspacebuffers.WorkspaceBufferImpl</class>
+                    <taskspawner>defaultTS</taskspawner>
+                </module>
+                <module name="BroadcastQueue">
+                    <class>edu.memphis.ccrg.lida.motivation.workspace.MotivationBroadcastQueueImpl</class>
+                    <param name="workspace.broadcastQueueCapacity" type="int">1</param>
+                    <param name="workspace.broadcastQueueDecay" type="boolean">true</param>
+                    <taskspawner>defaultTS</taskspawner>
+                </module>                
+            </submodules>
+            <param name="linkCategory">temporal-link</param>
+            <taskspawner>defaultTS</taskspawner>
+            <initialTasks>	
+				<task name="FeelingSBCodelet">
+					<tasktype>FeelingSBCodelet</tasktype>
+					<ticksperrun>6</ticksperrun>
+				</task>		
+            </initialTasks>
+            <initializerclass>edu.memphis.ccrg.lida.motivation.workspace.MotivationWorkspaceInitializer</initializerclass>
+        </module>
+        <module name="AttentionCodeletModule">
+            <class>edu.memphis.ccrg.lida.attentioncodelets.AttentionCodeletModule</class>
+            <associatedmodule>Workspace</associatedmodule>
+            <associatedmodule>GlobalWorkspace</associatedmodule>
+            <param name="attentionModule.defaultCodeletType">NeighborhoodAttentionCodelet</param>
+			<param name="attentionModule.codeletActivation" type="double">1.0</param>
+			<param name="attentionModule.codeletRemovalThreshold" type="double">-1.0</param>
+			<param name="attentionModule.codeletReinforcement" type="double">0.1</param>
+            <taskspawner>defaultTS</taskspawner>
+            <initialTasks>
+				<task name="DefaultAttentionCodelet">
+					<tasktype>DefaultAttentionCodelet</tasktype>
+					<ticksperrun>5</ticksperrun>
+					<param name="refractoryPeriod" type="int">5</param>					
+					<param name="attentionThreshold" type="double">0.0</param>
+					<param name="retrievalDepth" type="int">5</param>					
+					<param name="learnable.baseLevelActivation" type="double">0.6</param>
+				</task>		
+			</initialTasks>
+        </module>
+		<module name="GlobalWorkspace">
+			<class>edu.memphis.ccrg.lida.globalworkspace.GlobalWorkspaceImpl</class>
+			<associatedmodule>AttentionCodeletModule</associatedmodule>			
+			<param name="globalWorkspace.coalitionRemovalThreshold" type="double">0.0</param>
+            <param name="globalWorkspace.coalitionDecayStrategy">coalitionDecay</param>
+            <param name="globalWorkspace.refractoryPeriod" type="int">100</param>
+            <!-- Trigger parameters -->
+            <param name="globalWorkspace.delayNoBroadcast" type="int">100</param>
+            <param name="globalWorkspace.individualActivationThreshold" type="double">0.0</param>
+			<taskspawner>defaultTS</taskspawner>
+			<initializerclass>edu.memphis.ccrg.motivation.globalworkspace.MotivationGlobalWorkspaceInitializer</initializerclass>
+		</module>
+		<module name="ProceduralMemory">
+			<class>edu.memphis.ccrg.lida.motivation.proceduralmemory.MotivationProceduralMemory</class>
+           	<param name="proceduralMemory.conditionDecayStrategy">conditionDecay</param>
+           	<param name="proceduralMemory.schemeSelectionThreshold" type="double">0.0</param>
+           	<param name="proceduralMemory.contextWeight" type="double">1.0</param>
+           	<param name="proceduralMemory.addingListWeight" type="double">1.0</param>
+           	<param name="proceduralMemory.schemeClass">edu.memphis.ccrg.lida.proceduralmemory.SchemeImpl</param>
+           	<param name="linkCategory">temporal-link</param>           	
+          	<param name="scheme.1">|(food)()|action.eat|()()|0.01</param>
+			<taskspawner>defaultTS</taskspawner>
+			<initializerclass>edu.memphis.ccrg.lida.motivation.proceduralmemory.MotivationProceduralMemoryInitializer</initializerclass>
+		</module>
+		<module name="ActionSelection">
+			<class>edu.memphis.ccrg.lida.actionselection.BasicActionSelection</class>
+			<param name="actionSelection.backgroundTaskTicksPerRun" type="int">75</param>
+			<param name="actionSelection.refractoryPeriodTicks" type="int">200</param>
+			<param name="actionSelection.candidateThreshold" type="double">0.0</param>
+			<param name="actionSelection.thresholdDecayRate" type="double">0.0</param>
+			<param name="actionSelection.removalThreshold" type="double">0.0</param>
+			<param name="actionSelection.behaviorDecayStrategy" type="string">behaviorDecay</param> 
+			<taskspawner>defaultTS</taskspawner>
+		</module>
+		<module name="SensoryMotorMemory">
+            <class>edu.memphis.ccrg.lida.sensorymotormemory.BasicSensoryMotorMemory</class>
+            <associatedmodule>Environment</associatedmodule>            
+            <param name="smm.processActionTaskTicks" type="int">150</param>
+          	<param name="smm.mapping.1">action.eat,algorithm.consumeFood</param>  		
+            <taskspawner>defaultTS</taskspawner>
+            <initializerclass>edu.memphis.ccrg.lida.sensorymotormemory.BasicSensoryMotorMemoryInitializer</initializerclass>
+        </module>
+	</submodules>
+	<listeners>
+		<listener> 
+			<listenertype>edu.memphis.ccrg.lida.pam.PamListener</listenertype>
+			<modulename>PerceptualAssociativeMemory</modulename>
+			<listenername>Workspace</listenername>
+		</listener>		
+		<listener>
+            <listenertype>edu.memphis.ccrg.lida.globalworkspace.BroadcastListener</listenertype>
+            <modulename>GlobalWorkspace</modulename>
+            <listenername>PerceptualAssociativeMemory</listenername>
+        </listener>
+        <listener>
+            <listenertype>edu.memphis.ccrg.lida.globalworkspace.BroadcastListener</listenertype>
+            <modulename>GlobalWorkspace</modulename>
+            <listenername>Workspace</listenername>
+        </listener>
+        <listener>
+            <listenertype>edu.memphis.ccrg.lida.globalworkspace.BroadcastListener</listenertype>
+            <modulename>GlobalWorkspace</modulename>
+            <listenername>ProceduralMemory</listenername>
+        </listener>
+        <listener>
+            <listenertype>edu.memphis.ccrg.lida.proceduralmemory.ProceduralMemoryListener</listenertype>
+            <modulename>ProceduralMemory</modulename>
+            <listenername>ActionSelection</listenername>
+        </listener>        
+        <listener>
+            <listenertype>edu.memphis.ccrg.lida.actionselection.ActionSelectionListener</listenertype>
+            <modulename>ActionSelection</modulename>
+            <listenername>SensoryMotorMemory</listenername>
+        </listener>		
+	</listeners>
+</lida>

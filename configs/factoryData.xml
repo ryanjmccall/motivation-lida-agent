@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LidaFactories xmlns="http://ccrg.cs.memphis.edu/LidaFactories"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ccrg.cs.memphis.edu/LidaFactories LidaFactories.xsd ">
+	<strategies>
+		<strategy flyweight="true" name="defaultExcite" type="excite">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearExciteStrategy
+			</class>
+			<param name="m" type="double">1.0</param>
+			<param name="upperBound" type="double">1.0</param>
+			<param name="lowerBound" type="double">0.0</param>
+		</strategy>
+		<strategy flyweight="true" name="defaultDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearDecayStrategy
+			</class>
+			<param name="m" type="double">0.005</param>
+			<param name="lowerBound" type="double">0.0</param>
+		</strategy>
+		<strategy flyweight="true" name="motivationExcite" type="excite">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearExciteStrategy
+			</class>
+			<param name="m" type="double">1.0</param>
+			<param name="upperBound" type="double">1.0</param>
+			<param name="lowerBound" type="double">-1.0</param>
+		</strategy>
+		<strategy flyweight="true" name="noDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.NoDecayStrategy
+			</class>
+		</strategy>		
+		<strategy flyweight="true" name="defaultIncentiveSalienceDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearIncentiveSalienceDecay</class>
+			<param name="m" type="double">0.005</param>
+		</strategy>
+		<strategy flyweight="true" name="coalitionDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearDecayStrategy
+			</class>
+			<param name="m" type="double">0.005</param>
+			<param name="lowerBound" type="double">0.0</param>
+		</strategy>
+		<strategy flyweight="true" name="conditionDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearDecayStrategy
+			</class> 
+			<param name="m" type="double">0.005</param>
+			<param name="lowerBound" type="double">0.0</param>
+		</strategy>
+		<strategy flyweight="true" name="behaviorDecay" type="decay">
+			<class>edu.memphis.ccrg.lida.framework.strategies.LinearDecayStrategy
+			</class>
+			<param name="m" type="double">0.005</param>
+			<param name="lowerBound" type="double">0.0</param>
+		</strategy>
+		<strategy flyweight="true" name="DefaultTotalActivation" type="other">
+			<class>edu.memphis.ccrg.lida.framework.strategies.DefaultTotalActivationStrategy</class>
+		</strategy>
+		<strategy flyweight="true" name="WeightedTotalActivation" type="other">
+			<class>edu.memphis.ccrg.lida.framework.strategies.WeightedTotalActivationStrategy</class>
+			<param name="blaWeight" type="double">0.2</param>
+		</strategy>	
+	</strategies>
+	<nodes>
+		<node name="NodeImpl">
+			<class>edu.memphis.ccrg.lida.framework.shared.NodeImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+		</node>
+		<node name="PamNodeImpl">
+			<class>edu.memphis.ccrg.lida.pam.PamNodeImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+			<param name="learnable.baseLevelActivation" type="double">0.1</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">noDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">motivationExcite</param>
+			<param name="learnable.totalActivationStrategy" type="string">WeightedTotalActivation</param> 
+		</node>
+		<node name="FeelingNodeImpl">
+			<class>edu.memphis.ccrg.lida.motivation.shared.FeelingNodeImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+		</node>
+		<node name="FeelingPamNodeImpl">
+			<class>edu.memphis.ccrg.lida.motivation.pam.FeelingPamNodeImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+			<param name="learnable.baseLevelActivation" type="double">0.1</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">noDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">motivationExcite</param>
+			<param name="learnable.totalActivationStrategy" type="string">WeightedTotalActivation</param> 
+		</node>
+	</nodes>
+	<links>
+		<link name="LinkImpl">
+			<class>edu.memphis.ccrg.lida.framework.shared.LinkImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+		</link>
+		<link name="PamLinkImpl">
+			<class>edu.memphis.ccrg.lida.pam.PamLinkImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+			<param name="learnable.baseLevelActivation" type="double">0.1</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">noDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">motivationExcite</param>
+			<param name="learnable.totalActivationStrategy" type="string">WeightedTotalActivation</param> 
+		</link>
+		<link name="FeelingLinkImpl">
+			<class>edu.memphis.ccrg.lida.motivation.shared.FeelingLinkImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+		</link>
+		<link name="FeelingPamLinkImpl">
+			<class>edu.memphis.ccrg.lida.motivation.pam.FeelingPamLinkImpl</class>
+			<defaultstrategy>defaultDecay</defaultstrategy>
+			<defaultstrategy>defaultExcite</defaultstrategy>
+			<param name="learnable.baseLevelActivation" type="double">0.1</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">noDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">motivationExcite</param>
+			<param name="learnable.totalActivationStrategy" type="string">WeightedTotalActivation</param> 
+		</link>
+	</links>
+	<tasks>		
+		<task name="ObjectPresenceDetector">
+			<class>edu.memphis.ccrg.motivation.pam.ObjectPresenceDetector
+			</class>
+			<ticksperrun>1</ticksperrun>
+			<associatedmodule>SensoryMemory</associatedmodule>
+			<associatedmodule>PerceptualAssociativeMemory</associatedmodule>
+			<param name="learnable.baseLevelActivation" type="double">0.0</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>	
+		<task name="FeelingDetector">
+			<class>edu.memphis.ccrg.motivation.pam.FeelingDetector</class>
+			<ticksperrun>1</ticksperrun>
+			<associatedmodule>SensoryMemory</associatedmodule>
+			<associatedmodule>PerceptualAssociativeMemory</associatedmodule>
+			<param name="learnable.baseLevelActivation" type="double">0.0</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>				
+		<task name="TemporalSBCodelet">
+			<class>edu.memphis.ccrg.motivation.workspace.TemporalStructureBuildingCodelet</class>
+			<ticksperrun>25</ticksperrun>
+			<associatedmodule function="TO_READ_FROM">BroadcastQueue</associatedmodule>
+			<associatedmodule function="TO_WRITE_TO">CurrentSituationalModel</associatedmodule>
+			<param name="refractoryPeriod" type="int">100</param>
+			<param name="retrievalDepth" type="int">1</param>
+			<param name="attentionThreshold" type="double">0.0</param>
+			<param name="learnable.baseLevelActivation" type="double">0.5</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>
+		<task name="FeelingSBCodelet">
+			<class>edu.memphis.ccrg.lida.motivation.workspace.FeelingStructureBuildingCodelet</class>
+			<ticksperrun>25</ticksperrun>
+			<associatedmodule function="TO_WRITE_TO">CurrentSituationalModel</associatedmodule>
+			<param name="refractoryPeriod" type="int">5</param>
+			<param name="learnable.baseLevelActivation" type="double">0.25</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>		
+		<task name="NothingAttentionCodelet">
+			<class>edu.memphis.ccrg.motivation.attention.NothingAttentionCodelet</class>
+			<ticksperrun>5</ticksperrun>
+			<associatedmodule function="TO_READ_FROM">CurrentSituationalModel</associatedmodule>
+			<associatedmodule function="TO_WRITE_TO">GlobalWorkspace</associatedmodule>
+			<param name="refractoryPeriod" type="int">5</param>
+			<param name="learnable.baseLevelActivation" type="double">0.25</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>
+		<task name="DefaultAttentionCodelet">
+			<class>edu.memphis.ccrg.lida.attentioncodelets.DefaultAttentionCodelet</class>
+			<ticksperrun>100</ticksperrun>
+			<associatedmodule function="TO_READ_FROM">CurrentSituationalModel</associatedmodule>
+			<associatedmodule function="TO_WRITE_TO">GlobalWorkspace</associatedmodule>
+			<param name="refractoryPeriod" type="int">100</param>
+			<param name="retrievalDepth" type="int">1</param>
+			<param name="attentionThreshold" type="double">0.0</param>
+			<param name="learnable.baseLevelActivation" type="double">0.5</param>
+			<param name="learnable.baseLevelRemovalThreshold" type="double">-1.0</param>
+			<param name="learnable.baseLevelDecayStrategy" type="string">defaultDecay</param>
+			<param name="learnable.baseLevelExciteStrategy" type="string">defaultExcite</param>		
+			<param name="learnable.totalActivationStrategy" type="string">DefaultTotalActivation</param>
+		</task>
+	</tasks>
+</LidaFactories>

@@ -1,0 +1,5 @@
+Lesioned: true
+Trials: 30
+
+Fixed Parameters	PhaseOne-Phase_CueStageFoodCupBehavior	Std Dev	PhaseOne-Phase_FoodConsumed	Std Dev	PhaseTwo-Phase_CueStageFoodCupBehavior	Std Dev	PhaseTwo-Phase_FoodConsumed	Std Dev	PhaseThree-Phase_CueStageFoodCupBehavior	Std Dev	PhaseThree-Phase_FoodConsumed	Std Dev
+0.0	0.383	0.061	0.5	0.0	0.0	0.0	0.5	0.0	0.803	0.017	0.0	0.0
